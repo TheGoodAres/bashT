@@ -44,8 +44,22 @@ append_to_csv_file() {
 delete_entry_by_id() {
     filename=$1
     read -p "Enter id:" id
+    if [-f "$filename"]; then
+        grep -v -w "$id" "$filename" > temp.txt && mv temp.txt "$filename"
+    else 
+        echo "File $filename does not exits."
+    fi
+}
+edit_row() {
+    filename=$1
+    read -p "Enter id: " id
+    read -p "Enter name: " name
+    read -p "Enter notaSO: " notaSO
+    read -p "Enter email: " email
+    local new_row="$id,$name,$notaSO,$email"
+    local temp_file=$(mktemp)
 
-    grep -v -w "$id" "$filename" > temp.txt && mv temp.txt "$filename"
+    awk -v id="$id" -v row="$new_row" 'BEGIN{FS=OFS=","} $1 != id {print $0} $1 == id {print row}' "$filename" > "$temp_file" && mv "$temp_file" "$filename"
 }
 # Main loop
 while true; do
@@ -54,6 +68,7 @@ while true; do
     echo "2. Edit CSV file"
     echo "3. Append content to CSV file"
     echo "4. Delete entry of CSV file"
+    echo "5. Edit CSV row by id"
     echo "0. Exit"
 
     read -p "Enter your choice: " choice
@@ -74,6 +89,10 @@ while true; do
         4)
             read -p "Enter the filename: " filename
             delete_entry_by_id "$filename"
+            ;;
+        5)
+            read -p "Enter the filename: " filename
+            edit_row "$filename"
             ;;
         0)
             echo "Exiting..."
