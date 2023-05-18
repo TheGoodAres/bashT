@@ -26,7 +26,14 @@ edit_csv_file() {
 append_to_csv_file() {
     filename=$1
     read -p "Enter nume: " nume
-    read -p "Enter notaSO: " notaSO
+    while true; do 
+        read -p "Enter notaSO: " notaSO
+        if [[ "$notaSO" =~ ^[1-9]$ ]] || [[ "$notaSO" == 10 ]]; then
+            break
+        else 
+            echo "Invalid number. Please enter a number between 1 and 10"
+        fi
+    done
     read -p "Enter email: " email
 
     if [ -f "$filename" ]; then
@@ -54,7 +61,14 @@ edit_row() {
     filename=$1
     read -p "Enter id: " id
     read -p "Enter name: " name
-    read -p "Enter notaSO: " notaSO
+    while true; do 
+        read -p "Enter notaSO: " notaSO
+        if [[ "$notaSO" =~ ^[1-9]$ ]] || [[ "$notaSO" == 10 ]]; then
+            break
+        else 
+            echo "Invalid number. Please enter a number between 1 and 10"
+        fi
+    done
     read -p "Enter email: " email
     local new_row="$id,$name,$notaSO,$email"
     local temp_file=$(mktemp)
