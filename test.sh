@@ -94,15 +94,24 @@ sort_by_notaSO() {
 }
 
 create_csv_file() {
-    filename=$1
-    if [ -f "$filename" ]; then 
-        echo "This file already exists!"
-    else 
-        echo "ID,Nume,NotaSO,email" > "$filename"
-    fi
+    while true; do
+        read -p "Enter the filename(without extension) or "exit": " filename
+        if [ -f "$filename" ]; then 
+            echo "This file already exists!"
+        elif [[ $filename == *".csv"* ]]; then
+            echo "Do not add the file extensio."
+        elif [[ $filename == "exit" ]]; then
+            echo "Exiting."
+            break
+        else
+            echo "ID,Nume,NotaSO,email" > "$filename.csv"
+            break
+        fi
+    done
 }
 # Main loop
 while true; do
+    echo "------------------------------------------------------------------"
     echo "CSV File Editor"
     echo "1. Read CSV file"
     echo "2. Create CSV file"
@@ -120,7 +129,6 @@ while true; do
             read_csv_file "$filename"
             ;;
         2)
-            read -p "Enter the filename: " filename
             create_csv_file "$filename"
             ;;
         3)
