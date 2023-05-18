@@ -11,20 +11,10 @@ read_csv_file() {
     fi
 }
 
-# Function to edit the CSV file
-edit_csv_file() {
-    filename=$1
-    if [ -f "$filename" ]; then
-        echo "Opening $filename for editing..."
-        nano "$filename"
-    else
-        echo "File $filename does not exist."
-    fi
-}
-
 # Function to append content to the CSV file
 append_to_csv_file() {
     filename=$1
+    regex="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     read -p "Enter nume: " nume
     while true; do 
         read -p "Enter notaSO: " notaSO
@@ -34,8 +24,14 @@ append_to_csv_file() {
             echo "Invalid number. Please enter a number between 1 and 10"
         fi
     done
-    read -p "Enter email: " email
-
+    while true; do
+        read -p "Enter email: " email
+        if [[ $email =~ $regex ]]; then
+            break
+        else 
+            echo "Invalid email. Please try again!"
+        fi
+    done
     if [ -f "$filename" ]; then
         # Get the last ID from the CSV file
         last_id=$(tail -1 "$filename" | cut -d',' -f1)
@@ -59,6 +55,7 @@ delete_entry_by_id() {
 }
 edit_row() {
     filename=$1
+    regex="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
     read -p "Enter id: " id
     read -p "Enter name: " name
     while true; do 
@@ -69,7 +66,14 @@ edit_row() {
             echo "Invalid number. Please enter a number between 1 and 10"
         fi
     done
-    read -p "Enter email: " email
+    while true; do
+        read -p "Enter email: " email
+        if [[ $email =~ $regex ]]; then
+            break
+        else 
+            echo "Invalid email. Please try again!"
+        fi
+    done
     local new_row="$id,$name,$notaSO,$email"
     local temp_file=$(mktemp)
 
@@ -79,10 +83,9 @@ edit_row() {
 while true; do
     echo "CSV File Editor"
     echo "1. Read CSV file"
-    echo "2. Edit CSV file"
+    echo "2. Edit CSV row by id"
     echo "3. Append content to CSV file"
     echo "4. Delete entry of CSV file"
-    echo "5. Edit CSV row by id"
     echo "0. Exit"
 
     read -p "Enter your choice: " choice
@@ -94,7 +97,7 @@ while true; do
             ;;
         2)
             read -p "Enter the filename: " filename
-            edit_csv_file "$filename"
+            edit_row "$filename"
             ;;
         3)
             read -p "Enter the filename: " filename
@@ -103,10 +106,6 @@ while true; do
         4)
             read -p "Enter the filename: " filename
             delete_entry_by_id "$filename"
-            ;;
-        5)
-            read -p "Enter the filename: " filename
-            edit_row "$filename"
             ;;
         0)
             echo "Exiting..."
