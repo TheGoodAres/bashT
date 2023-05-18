@@ -40,6 +40,13 @@ append_to_csv_file() {
         echo "File $filename does not exist."
     fi
 }
+
+delete_entry_by_id() {
+    filename=$1
+    read -p "Enter id:" id
+
+    grep -v -w "$id" "$filename" > temp.txt && mv temp.txt "$filename"
+}
 # Main loop
 while true; do
     echo "CSV File Editor"
