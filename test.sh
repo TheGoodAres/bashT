@@ -92,14 +92,24 @@ sort_by_notaSO() {
         echo "File $filename does not exist."
     fi
 }
+
+create_csv_file() {
+    filename=$1
+    if [ -f "$filename" ]; then 
+        echo "This file already exists!"
+    else 
+        echo "ID,Nume,NotaSO,email" > "$filename"
+    fi
+}
 # Main loop
 while true; do
     echo "CSV File Editor"
     echo "1. Read CSV file"
-    echo "2. Edit CSV row by id"
-    echo "3. Append content to CSV file"
-    echo "4. Delete entry of CSV file"
-    echo "5. Sort by notaSO"
+    echo "2. Create CSV file"
+    echo "3. Edit CSV row by id"
+    echo "4. Append content to CSV file"
+    echo "5. Delete entry of CSV file"
+    echo "6. Sort by notaSO"
     echo "0. Exit"
 
     read -p "Enter your choice: " choice
@@ -111,17 +121,21 @@ while true; do
             ;;
         2)
             read -p "Enter the filename: " filename
-            edit_row "$filename"
+            create_csv_file "$filename"
             ;;
         3)
             read -p "Enter the filename: " filename
-            append_to_csv_file "$filename"
+            edit_row "$filename"
             ;;
         4)
             read -p "Enter the filename: " filename
-            delete_entry_by_id "$filename"
+            append_to_csv_file "$filename"
             ;;
         5)
+            read -p "Enter the filename: " filename
+            delete_entry_by_id "$filename"
+            ;;
+        6)
             read -p "Enter the filename: " filename
             sort_by_notaSO "$filename"
             ;;
