@@ -46,8 +46,9 @@ append_to_csv_file() {
 
 delete_entry_by_id() {
     filename=$1
-    read -p "Enter id:" id
     if [ -f "$filename" ]; then
+        cat "$filename"
+        read -p "Enter id:" id
         grep -v -w "$id" "$filename" > temp.txt && mv temp.txt "$filename"
     else 
         echo "File $filename does not exits."
@@ -56,6 +57,7 @@ delete_entry_by_id() {
 edit_row() {
     filename=$1
     if [ -f "$filename" ]; then
+        cat "$filename"
         regex="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         read -p "Enter id: " id
         read -p "Enter name: " name
@@ -120,7 +122,7 @@ while true; do
     echo "5. Delete entry of CSV file"
     echo "6. Sort by notaSO"
     echo "0. Exit"
-
+    echo "------------------------------------------------------------------"
     read -p "Enter your choice: " choice
 
     case $choice in
