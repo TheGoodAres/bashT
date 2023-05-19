@@ -2,9 +2,12 @@
 
 # Function to read the CSV file
 read_csv_file() {
-    filename=$1
+    read -p "Enter the filename or exit: " filename
     #if the file exista then its contents will be printed on the screen
-    if [ -f "$filename" ]; then
+    filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    if [[ $filename == "exit" ]]; then
+        echo "Exiting reading mode"
+    elif [ -f "$filename" ]; then
         echo "=== Content of $filename ==="
         cat "$filename"
     else
@@ -14,9 +17,12 @@ read_csv_file() {
 
 # Function to append content to the CSV file
 append_to_csv_file() {
-    filename=$1
+    read -p "Enter the filename or exit: " filename
     #the following checks if the given file exists, if it does not then it will let the user know
-    if [ -f "$filename" ]; then
+    filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    if [[ $filename == "exit" ]]; then
+        echo "Exiting appending mode"
+    elif [ -f "$filename" ]; then
     #regex used to match a basic email
         regex="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
         read -p "Enter nume: " nume
@@ -51,9 +57,12 @@ append_to_csv_file() {
 }
 
 delete_entry_by_id() {
-    filename=$1
+    read -p "Enter the filename or exit: " filename
+    filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    if [[ $filename == "exit" ]]; then
+        echo "Exiting deleting mode"
     #checks that the file exists
-    if [ -f "$filename" ]; then
+    elif [ -f "$filename" ]; then
         #print the file
         cat "$filename"
         #take the user input
@@ -65,9 +74,12 @@ delete_entry_by_id() {
     fi
 }
 edit_row() {
-    filename=$1
+    read -p "Enter the filename or exit: " filename
+    filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    if [[ $filename == "exit" ]]; then
+        echo "Exiting editing mode"
     #checks if the file exists
-    if [ -f "$filename" ]; then
+    elif [ -f "$filename" ]; then
         #print the file
         cat "$filename"
         #basic regex for email
@@ -106,9 +118,12 @@ edit_row() {
 }
 
 sort_by_notaSO() {
-    filename=$1
+    read -p "Enter the filename or exit: " filename
+    filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
+    if [[ $filename == "exit" ]]; then
+        echo "Exiting sorting mode"
     #check if the file exists
-    if [ -f "$filename" ]; then
+    elif [ -f "$filename" ]; then
         #sorts the file by using the delimiter ",", then sets the sorting parameter to the 3rd column
         #tells it that it is a numerical variable
         #makes it sort it as  reverse
@@ -130,7 +145,7 @@ create_csv_file() {
             echo "Do not add the file extensio."
         #checks if the input is "exit", it will stop the loop if it is so
         elif [[ $filename == "exit" ]]; then
-            echo "Exiting."
+            echo "Exiting creating mode."
             break
         else
             echo "ID,Nume,NotaSO,email" > "$filename.csv"
@@ -154,26 +169,23 @@ while true; do
 
     case $choice in
         1)
-            read -p "Enter the filename: " filename
+            
             read_csv_file "$filename"
             ;;
         2)
             create_csv_file "$filename"
             ;;
         3)
-            read -p "Enter the filename: " filename
+            
             edit_row "$filename"
             ;;
         4)
-            read -p "Enter the filename: " filename
             append_to_csv_file "$filename"
             ;;
         5)
-            read -p "Enter the filename: " filename
             delete_entry_by_id "$filename"
             ;;
         6)
-            read -p "Enter the filename: " filename
             sort_by_notaSO "$filename"
             ;;
         0)
