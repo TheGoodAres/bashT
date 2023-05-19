@@ -174,23 +174,23 @@ while true; do
 
     case $choice in
         1)
-            read_csv_file "$filename"
+            read_csv_file 
             ;;
         2)
-            create_csv_file "$filename"
+            create_csv_file 
             ;;
         3)
             
-            edit_row "$filename"
+            edit_row 
             ;;
         4)
-            append_to_csv_file "$filename"
+            append_to_csv_file
             ;;
         5)
-            delete_entry_by_id "$filename"
+            delete_entry_by_id 
             ;;
         6)
-            sort_by_notaSO "$filename"
+            sort_by_notaSO 
             ;;
         0)
             echo "Exiting..."
