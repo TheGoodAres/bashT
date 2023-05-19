@@ -2,7 +2,7 @@
 
 # Function to read the CSV file
 read_csv_file() {
-    read -p "Enter the filename or exit: " filename
+    read -r -p "Enter the filename or exit: " filename
     #if the file exista then its contents will be printed on the screen
     filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
     if [[ $filename == "exit" ]]; then
@@ -17,7 +17,7 @@ read_csv_file() {
 
 # Function to append content to the CSV file
 append_to_csv_file() {
-    read -p "Enter the filename or exit: " filename
+    read -r -p "Enter the filename or exit: " filename
     #the following checks if the given file exists, if it does not then it will let the user know
     filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
     if [[ $filename == "exit" ]]; then
@@ -25,11 +25,11 @@ append_to_csv_file() {
     elif [ -f "$filename" ]; then
     #regex used to match a basic email
         regex="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        read -p "Enter nume: " nume
+        read -r -p "Enter nume: " nume
         #the following will ensure that the input is between 1 and 10,
         #it will loop until the input matches the requirements
         while true; do 
-            read -p "Enter notaSO: " notaSO
+            read -r -p "Enter notaSO: " notaSO
             if [[ "$notaSO" =~ ^[1-9]$ ]] || [[ "$notaSO" == 10 ]]; then
                 break
             else 
@@ -38,7 +38,7 @@ append_to_csv_file() {
         done
         #the following will run until the input matches the regex set further up
         while true; do
-            read -p "Enter email: " email
+            read -r -p "Enter email: " email
             if [[ $email =~ $regex ]]; then
                 break
             else 
@@ -56,8 +56,9 @@ append_to_csv_file() {
     fi
 }
 
+# Function to delete a row by its id
 delete_entry_by_id() {
-    read -p "Enter the filename or exit: " filename
+    read -r -p "Enter the filename or exit: " filename
     filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
     if [[ $filename == "exit" ]]; then
         echo "Exiting deleting mode"
@@ -66,15 +67,16 @@ delete_entry_by_id() {
         #print the file
         cat "$filename"
         #take the user input
-        read -p "Enter id:" id
+        read -r -p "Enter id:" id
         #find the line that with the id that matches, write the rest of the lines in a temporary file and then rename it to the given filename
         grep -v -w "$id" "$filename" > temp.txt && mv temp.txt "$filename"
     else 
         echo "File $filename does not exits."
     fi
 }
+#function to edit a row by its id
 edit_row() {
-    read -p "Enter the filename or exit: " filename
+    read -r -p "Enter the filename or exit: " filename
     filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
     if [[ $filename == "exit" ]]; then
         echo "Exiting editing mode"
@@ -84,11 +86,11 @@ edit_row() {
         cat "$filename"
         #basic regex for email
         regex="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-        read -p "Enter id: " id
-        read -p "Enter name: " name
+        read -r -p "Enter id: " id
+        read -r -p "Enter name: " name
         #checks if the input is between 1 and 10, if it does not match, it will ask until it does
         while true; do 
-            read -p "Enter notaSO: " notaSO
+            read -r -p "Enter notaSO: " notaSO
             if [[ "$notaSO" =~ ^[1-9]$ ]] || [[ "$notaSO" == 10 ]]; then
                 break
             else 
@@ -97,7 +99,7 @@ edit_row() {
         done
         #checks that the input matches the regex for the email, if it does not it will ask until it does
         while true; do
-            read -p "Enter email: " email
+            read -r -p "Enter email: " email
             if [[ $email =~ $regex ]]; then
                 break
             else 
@@ -117,8 +119,9 @@ edit_row() {
     fi
 }
 
+#function to show the top 4 notaSO
 sort_by_notaSO() {
-    read -p "Enter the filename or exit: " filename
+    read -r -p "Enter the filename or exit: " filename
     filename=$(echo "$filename" | tr '[:upper:]' '[:lower:]')
     if [[ $filename == "exit" ]]; then
         echo "Exiting sorting mode"
@@ -134,9 +137,10 @@ sort_by_notaSO() {
     fi
 }
 
+#function to create a new csv fiile
 create_csv_file() {
     while true; do
-        read -p "Enter the filename(without extension) or "exit": " filename
+        read -r -p "Enter the filename(without extension) or 'exit': " filename
         #checks if the file exists
         if [ -f "$filename" ]; then 
             echo "This file already exists!"
@@ -153,6 +157,7 @@ create_csv_file() {
         fi
     done
 }
+
 # Main loop
 while true; do
     echo "------------------------------------------------------------------"
@@ -165,11 +170,10 @@ while true; do
     echo "6. Sort by notaSO"
     echo "0. Exit"
     echo "------------------------------------------------------------------"
-    read -p "Enter your choice: " choice
+    read -r -p "Enter your choice: " choice
 
     case $choice in
         1)
-            
             read_csv_file "$filename"
             ;;
         2)
